@@ -1,42 +1,66 @@
 package com.tasteMusic.TasteMusic.controller;
 
-import java.util.List;
+
+
+
+import java.util.Scanner;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tasteMusic.TasteMusic.Client.Album;
-import com.tasteMusic.TasteMusic.Client.AlbumSpotify;
+import com.tasteMusic.TasteMusic.Client.AlbumForEmotion;
+import com.tasteMusic.TasteMusic.Client.AlbumResponse;
 import com.tasteMusic.TasteMusic.Client.AuthSpotify;
 import com.tasteMusic.TasteMusic.Client.LoginRequest;
+import com.tasteMusic.TasteMusic.credentials.Credentials;
+
 
 @RestController
 @RequestMapping("/spotify")
 public class musicController {
 
     private final AuthSpotify authSpotify;
-    private final AlbumSpotify albumSpotify;
+    private final AlbumResponse albumResponse;
+    private final AlbumForEmotion albumEmotion;
+    private final Credentials credentials;
+   
 
 
-    public musicController(AuthSpotify authSpotify, AlbumSpotify albumSpotify) {
+    public musicController(AuthSpotify authSpotify,AlbumResponse albumResponse,AlbumForEmotion albumEmotion,Credentials credentials) {
         this.authSpotify = authSpotify;
-        this.albumSpotify = albumSpotify;
+        this.albumResponse = albumResponse;
+        this.albumEmotion = albumEmotion;
+        this.credentials = credentials;
+       
     }
 
+   
+    
+
     @GetMapping("/artist")
-    public ResponseEntity <List<Album>>helloWord(){
+    public ResponseEntity <Album> getAlbumForEmotion(){
+        
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("How you feeling today?");
+        String emotion = scanner.nextLine();
+        
+        
         var request = new LoginRequest(
             "client_credentials",
-            "b3ac16c381eb49058b8e7f6202eb78c7",
-            "bf5b8f40514146d294b5400f7f8c2419"
+            credentials.CLIENT_ID.toString(),
+            credentials.CLIENT_SECRET.toString()
         );
        var token= authSpotify.login(request).getAcessToken();
 
-       var response = albumSpotify.getReleases("Bearer" + token);
+       String albumId = albumEmotion.getAlbumforEmotion(emotion);
 
-        return ResponseEntity.ok(response.getAlbums().getItems());
+       Album album = albumResponse.getAlbumyId(albumId,"Bearer " + token);
+
+       return ResponseEntity.ok(album);
 
     }
 }

@@ -1,19 +1,28 @@
 package com.tasteMusic.TasteMusic.Client;
 
-public class Album {
-     
-    private String id;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class Album {
+    
+    @JsonProperty("name")
     private String name;
 
-    private String releaseDate;
+    @JsonProperty("images")
+    private List<Images> images;
 
-    public String getId() {
-        return id;
+    
+    
+    
+    
+    public Album() {
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public Album(String name, List<Images> images) {
+        this.name = name;
+        this.images = images;
+        
     }
 
     public String getName() {
@@ -24,24 +33,20 @@ public class Album {
         this.name = name;
     }
 
-    public String getReleaseDate() {
-        return releaseDate;
+    public List<Images> getImages() {
+        return images;
     }
 
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
+    public void setImages(List<Images> images) {
+        this.images = images;
     }
 
-    public Album() {
-    }
-
-    public Album(String id, String name, String releaseDate) {
-        this.id = id;
-        this.name = name;
-        this.releaseDate = releaseDate;
-    }
+   
 
     
-
+    
+    
+    
+    
     
 }
