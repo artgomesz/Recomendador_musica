@@ -42,12 +42,7 @@ public class musicController {
     
 
     @GetMapping("/artist")
-    public ResponseEntity <Album> getAlbumForEmotion(){
-        
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("How you feeling today?");
-        String emotion = scanner.nextLine();
-        
+    public ResponseEntity <Album> getAlbumForEmotion(String emotion){
         
         var request = new LoginRequest(
             "client_credentials",
